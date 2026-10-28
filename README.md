@@ -5,6 +5,8 @@ Application web de conception d'espaces, pensée pour être publiée sur GitHub 
 - Modèles de départ : maison, appartement, terrain, bâtiment.
 - Dimensions paramétrables du terrain et du volume bâti.
 - Plan 2D SVG interactif : ajout de pièces, sélection, déplacement, dimensions, duplication et suppression.
+- Annuler/rétablir les modifications (boutons et raccourcis Ctrl/Cmd+Z et Ctrl/Cmd+Y).
+- Rotation des meubles sélectionnés, limites de placement et placement des pièces sans chevauchement lorsque l’espace le permet.
 - Catalogue de mobilier et d'éléments extérieurs.
 - Assistant texte local pour les demandes courantes (« ajoute un salon, deux chambres et une piscine »).
 - Aperçu 3D en direct avec Three.js, navigation orbitale, styles, toit optionnel et terrain.
@@ -29,6 +31,10 @@ Le projet utilise les modules Three.js depuis jsDelivr : une connexion Internet 
 - Sélectionnez une pièce/un meuble pour éditer ses dimensions et sa position dans le panneau de droite.
 - Passez en **Vue 3D** pour orbiter avec la souris/le doigt et zoomer avec la molette/le geste de pincement.
 - **Enregistrer** garde le dernier projet dans le stockage local du navigateur. **Exporter le projet** crée un JSON que vous pouvez sauvegarder ou réimporter en le sélectionnant dans votre navigateur (le mécanisme d'import est préparé dans le code, voir note ci-dessous).
+
+## Version améliorée
+
+La vue 3D utilise une façade ouverte lorsque le toit est masqué pour mieux voir l’intérieur. Les pièces et meubles partagent désormais le même repère de coordonnées entre le plan 2D et la scène 3D ; la caméra conserve mieux son cadrage lors des modifications.
 
 ## Limites importantes
 
