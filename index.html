@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111318">
+  <title>Maison3D Studio — Concevez votre espace</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Maison3D Studio accueil">
+        <span class="brand-mark">M<span>3D</span></span>
+        <span><strong>Maison3D</strong><small>STUDIO DE CONCEPTION</small></span>
+      </a>
+      <div class="project-name"><span class="live-dot"></span><input id="projectName" value="Mon projet de maison" aria-label="Nom du projet"></div>
+      <div class="top-actions">
+        <button class="btn btn-quiet" id="saveBtn">Enregistrer</button>
+        <button class="btn btn-outline" id="importBtn">Importer</button><button class="btn btn-outline" id="exportBtn">Exporter le projet</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="sidebar">
+        <div class="sidebar-heading"><span>VOTRE PROJET</span><span class="step-count">01 — 04</span></div>
+        <nav class="steps" aria-label="Étapes du projet">
+          <button class="step active" data-step="terrain"><span class="step-icon">⌂</span><span><b>Terrain & type</b><small>Choisissez votre base</small></span><span class="step-arrow">›</span></button>
+          <button class="step" data-step="structure"><span class="step-icon">▤</span><span><b>Structure</b><small>Dimensions et pièces</small></span><span class="step-arrow">›</span></button>
+          <button class="step" data-step="amenagement"><span class="step-icon">◫</span><span><b>Aménagement</b><small>Meubles et décoration</small></span><span class="step-arrow">›</span></button>
+          <button class="step" data-step="rendu"><span class="step-icon">◈</span><span><b>Rendu 3D</b><small>Visualisez votre projet</small></span><span class="step-arrow">›</span></button>
+        </nav>
+
+        <section class="panel-section" id="terrainPanel">
+          <div class="section-title"><h2>Point de départ</h2><p>Choisissez le modèle à concevoir.</p></div>
+          <div class="type-grid">
+            <button class="type-card selected" data-type="house"><span class="type-art house-art">⌂</span><b>Maison</b><small>Plain-pied ou étage</small></button>
+            <button class="type-card" data-type="apartment"><span class="type-art apt-art">▥</span><b>Appartement</b><small>Plan intérieur</small></button>
+            <button class="type-card" data-type="land"><span class="type-art land-art">▱</span><b>Terrain</b><small>Aménagement extérieur</small></button>
+            <button class="type-card" data-type="building"><span class="type-art building-art">▦</span><b>Bâtiment</b><small>Projet multi-pièces</small></button>
+          </div>
+          <div class="field-grid">
+            <label>Largeur du terrain (m)<input type="number" id="landWidth" min="5" max="200" step="1" value="20"></label>
+            <label>Longueur du terrain (m)<input type="number" id="landLength" min="5" max="200" step="1" value="30"></label>
+          </div>
+          <div class="field-grid">
+            <label>Largeur bâtie (m)<input type="number" id="houseWidth" min="3" max="100" step=".5" value="10"></label>
+            <label>Longueur bâtie (m)<input type="number" id="houseLength" min="3" max="100" step=".5" value="12"></label>
+          </div>
+          <label class="full-label">Nombre de niveaux
+            <select id="floors"><option value="1">Plain-pied</option><option value="2">2 niveaux</option><option value="3">3 niveaux</option></select>
+          </label>
+          <button class="btn btn-primary full-btn" id="applyDimensions">Appliquer les dimensions <span>→</span></button>
+        </section>
+
+        <section class="panel-section hidden" id="structurePanel">
+          <div class="section-title"><h2>Pièces & structure</h2><p>Ajoutez des espaces à votre plan.</p></div>
+          <div class="room-buttons">
+            <button class="room-add" data-room="Salon"><span>▱</span><b>Salon</b><small>4 × 4 m</small><i>+</i></button>
+            <button class="room-add" data-room="Cuisine"><span>⌑</span><b>Cuisine</b><small>3 × 3 m</small><i>+</i></button>
+            <button class="room-add" data-room="Chambre"><span>▰</span><b>Chambre</b><small>3.5 × 3.5 m</small><i>+</i></button>
+            <button class="room-add" data-room="Salle de bain"><span>◉</span><b>Salle de bain</b><small>2 × 2.5 m</small><i>+</i></button>
+            <button class="room-add" data-room="Bureau"><span>▤</span><b>Bureau</b><small>2.5 × 3 m</small><i>+</i></button>
+            <button class="room-add" data-room="Garage"><span>▦</span><b>Garage</b><small>3 × 6 m</small><i>+</i></button>
+          </div>
+          <p class="hint">Les pièces peuvent être déplacées et redimensionnées dans la vue 2D. Elles restent des volumes de conception, pas des plans d'exécution.</p>
+        </section>
+
+        <section class="panel-section hidden" id="amenagementPanel">
+          <div class="section-title"><h2>Aménagement</h2><p>Sélectionnez un objet, puis cliquez sur le plan pour le placer.</p></div>
+          <div class="object-grid">
+            <button class="object-card" data-object="sofa"><span>🛋️</span><b>Canapé</b></button>
+            <button class="object-card" data-object="bed"><span>🛏️</span><b>Lit</b></button>
+            <button class="object-card" data-object="table"><span>▤</span><b>Table</b></button>
+            <button class="object-card" data-object="chair"><span>🪑</span><b>Chaise</b></button>
+            <button class="object-card" data-object="plant"><span>🪴</span><b>Plante</b></button>
+            <button class="object-card" data-object="kitchen"><span>▰</span><b>Meuble cuisine</b></button>
+            <button class="object-card" data-object="pool"><span>▧</span><b>Piscine</b></button>
+            <button class="object-card" data-object="tree"><span>🌳</span><b>Arbre</b></button>
+          </div>
+          <div class="divider"></div>
+          <label class="full-label">Style de décoration
+            <select id="styleSelect"><option value="modern">Moderne</option><option value="scandi">Scandinave</option><option value="industrial">Industriel</option><option value="mediterranean">Méditerranéen</option></select>
+          </label>
+          <button class="btn btn-outline full-btn" id="autoFurnish">Aménager automatiquement</button>
+          <p class="hint">Choisissez un objet puis cliquez sur le plan pour le placer. Sélectionnez un meuble sur le plan pour le supprimer ou le déplacer.</p>
+        </section>
+
+        <section class="panel-section hidden" id="renduPanel">
+          <div class="section-title"><h2>Rendu & export</h2><p>Explorez le volume de votre projet.</p></div>
+          <label class="full-label">Vue 3D
+            <select id="cameraView"><option value="perspective">Perspective</option><option value="top">Vue du dessus</option><option value="front">Vue de face</option></select>
+          </label>
+          <label class="toggle-row"><span><b>Afficher le toit</b><small>Masquer pour voir l'intérieur</small></span><input id="showRoof" type="checkbox"></label>
+          <label class="toggle-row"><span><b>Afficher le terrain</b><small>Pelouse et limites</small></span><input id="showLand" type="checkbox" checked></label>
+          <button class="btn btn-primary full-btn" id="downloadImage">Exporter l'image 3D ↓</button>
+          <button class="btn btn-outline full-btn" id="downloadPlan">Exporter le plan 2D ↓</button>
+          <p class="hint">Les rendus sont générés localement dans votre navigateur. Le projet peut être exporté en JSON et repris plus tard.</p>
+        </section>
+        <div class="sidebar-bottom"><span class="secure-icon">◇</span><span><b>Votre projet reste privé</b><small>Stockage local sur cet appareil</small></span></div>
+      </aside>
+
+      <section class="canvas-area">
+        <div class="canvas-toolbar">
+          <div class="view-tabs"><button class="view-tab active" data-view="2d">Plan 2D</button><button class="view-tab" data-view="3d">Vue 3D</button></div>
+          <div class="canvas-tools">
+            <span class="mode-label" id="modeLabel">PLAN D'AMÉNAGEMENT</span>
+            <button class="icon-btn" id="zoomOut" title="Dézoomer" aria-label="Dézoomer">−</button><button class="icon-btn" id="zoomIn" title="Zoomer" aria-label="Zoomer">+</button>
+            <button class="icon-btn" id="resetView" title="Réinitialiser la vue" aria-label="Réinitialiser la vue">↺</button>
+          </div>
+        </div>
+        <div class="viewport">
+          <div class="canvas2d" id="canvas2d">
+            <svg id="planSvg" viewBox="0 0 900 650" role="img" aria-label="Plan 2D interactif">
+              <defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="#d9dedf" stroke-width="1"/></pattern></defs>
+              <rect width="900" height="650" fill="#f4f6f5"/><rect width="900" height="650" fill="url(#grid)"/>
+              <g id="planDrawing"></g>
+            </svg>
+            <div class="canvas-legend"><span><i class="legend-line"></i> Murs / limites</span><span><i class="legend-dot"></i> Mobilier</span><span id="scaleLabel">Échelle indicative · 1 m ≈ 20 px</span></div>
+            <div class="canvas-tip" id="canvasTip">Cliquez sur une pièce pour la sélectionner · glissez pour déplacer</div>
+          </div>
+          <div class="canvas3d hidden" id="canvas3d"><div id="threeHost"></div><div class="three-hud"><span class="hud-pill"><i></i> APERÇU 3D EN DIRECT</span><span class="hud-help">Glisser : orbiter · Molette : zoomer</span></div><div class="loading3d" id="loading3d">Préparation de la scène 3D…</div></div>
+        </div>
+        <footer class="canvas-footer">
+          <div class="project-stats"><span><i class="stat-square"></i><span id="areaStat">120 m² habitables</span></span><span><i class="stat-dot"></i><span id="roomStat">0 pièce ajoutée</span></span><span><i class="stat-line"></i><span id="landStat">Terrain 600 m²</span></span></div>
+          <div class="footer-right"><span id="selectionStatus">Aucun élément sélectionné</span><button class="btn btn-danger-quiet" id="deleteSelected" disabled>Supprimer</button></div>
+        </footer>
+      </section>
+      <aside class="inspector">
+        <div class="inspector-head"><div><span class="eyebrow">PROPRIÉTÉS</span><h2 id="inspectorTitle">Votre projet</h2></div><span class="inspector-mark">◈</span></div>
+        <div id="inspectorContent">
+          <div class="preview-card"><div class="preview-mini"><span class="mini-roof"></span><span class="mini-house"></span><span class="mini-window"></span></div><div><b>Projet en cours</b><p>Construisez votre plan étape par étape.</p></div></div>
+          <div class="property-block"><h3>Raccourcis</h3><button class="quick-action" id="quickRoom"><span>＋</span> Ajouter une pièce <b>›</b></button><button class="quick-action" id="quickFurniture"><span>＋</span> Ajouter du mobilier <b>›</b></button><button class="quick-action" id="quick3d"><span>◈</span> Voir en 3D <b>›</b></button></div>
+          <div class="property-block"><h3>Assistant d'aménagement</h3><p class="muted">Décrivez ce que vous souhaitez, en français. L'assistant interprète les demandes courantes pour préparer votre espace.</p>
+            <textarea id="promptInput" rows="4" placeholder="Ex. : ajoute un salon, deux chambres et une piscine dans le jardin…"></textarea>
+            <button class="btn btn-primary full-btn" id="promptApply">Appliquer ma demande ↗</button><p class="tiny-note">Assistant intégré sans clé API : les commandes courantes sont interprétées localement.</p>
+          </div>
+        </div>
+      </aside>
+    </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <input type="file" id="importFile" accept=".json,application/json" hidden>
+  </div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
